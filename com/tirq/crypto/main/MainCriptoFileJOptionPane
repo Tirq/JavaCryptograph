@@ -1,0 +1,51 @@
+package com.tirq.crypto.main;
+
+import java.io.File;
+import java.util.Arrays;
+
+import javax.swing.JOptionPane;
+
+import com.tirq.crypto.utils.CryptoUtils;
+import com.tirq.crypto.utils.FileUtils;
+
+/**
+ * Exemplo usando o JOptonsPane para gerar hash(MD5,SHA-1,SHA-256,SHA512) de string informada
+ * 
+ * @author Tirq
+ * 
+ */
+public class MainCriptoFileJOptionPane {
+
+	public static void main(String[] args) {
+		try {
+			String file = JOptionPane
+					.showInputDialog("(Path)File to encrypto: ");
+			String fileCripto = JOptionPane
+					.showInputDialog("(Path)Name File encrypto: ");
+			String fileDecripto = JOptionPane
+					.showInputDialog("(Path)Name File decrypto: ");
+			String key = JOptionPane.showInputDialog("key: ");
+
+			for (boolean aes : Arrays.asList(true, false)) {
+				String tipo = aes ? "AES" : "RC4";
+				// CRIPTOGRAFANDO
+				String conteudo = CryptoUtils.fromHex(CryptoUtils.encode(
+						CryptoUtils.nullPadString(
+								new String(FileUtils.getBytes(new File(file))))
+								.getBytes(), key, aes));
+				FileUtils.SaveFile(conteudo, fileCripto + "_" + tipo);
+				// DESCRIPTOGRAFANDO
+				String conteudoCripto = new String(CryptoUtils.decode(
+						CryptoUtils.toHex(FileUtils.getStringFile(fileCripto
+								+ "_" + tipo)), key, aes)).trim();
+				FileUtils.SaveFile(conteudoCripto, fileDecripto + "_" + tipo);
+			}
+			JOptionPane.showMessageDialog(null,
+					"Sucess in Crypt/Decryt in files", "Cripto/Descripto:",
+					JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+}
