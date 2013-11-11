@@ -1,0 +1,48 @@
+package com.tirq.crypto.main;
+
+import java.util.Arrays;
+
+import javax.swing.JOptionPane;
+
+import com.tirq.crypto.utils.CryptoUtils;
+
+/**
+ * Exemplo usando o JOptonsPane para gerar hash(MD5,SHA-1,SHA-256,SHA512) de string informada
+ * 
+ * @author Tirq
+ * 
+ */
+public class MainCriptoTextJOptionPane {
+
+	public static void main(String[] args) {
+		try {
+			String msg = JOptionPane.showInputDialog("Text to hash:");
+			String key = JOptionPane.showInputDialog("Key to hash:");
+			StringBuilder msgAll = new StringBuilder();
+			for (boolean aes : Arrays.asList(true, false)) {
+				String tipo = aes ? "AES" : "RC4";
+				// CRIPTOGRAFAR
+				String msgCripto = CryptoUtils.fromHex(CryptoUtils.encode(
+						CryptoUtils.nullPadString(msg).getBytes(), key, aes));
+				JOptionPane.showInputDialog("Cripto text: " + msg + " key: "
+						+ key + " " + tipo, msgCripto);
+
+				// DESCRIPTOGRAFAR
+				String msgDescripto = new String(CryptoUtils.decode(
+						CryptoUtils.toHex(msgCripto), key, aes)).trim();
+				JOptionPane.showInputDialog("Descripto text: " + msg + " key: "
+						+ key + " " + tipo, msgDescripto);
+				msgAll.append(tipo + "\n");
+				msgAll.append("text: " + msg + " key: " + key + " " + tipo
+						+ " cripto: " + msgCripto + "\n");
+				msgAll.append("text: " + msg + " key: " + key + " " + tipo
+						+ " descripto: " + msgDescripto + "\n");
+				msgAll.append("\n\n");
+			}
+			JOptionPane.showMessageDialog(null, msgAll, "Cripto/Descripto:",
+					JOptionPane.INFORMATION_MESSAGE);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
