@@ -21,7 +21,8 @@ public final class CryptoUtils {
 
 	private static final String hexDigits = "0123456789abcdef";
 
-	public static final List<String> ALGORITHMS = Arrays.asList("MD5", "SHA-1", "SHA-256", "SHA-512");
+	public static final List<String> ALGORITHMS = Arrays.asList("MD5", "SHA-1",
+			"SHA-256", "SHA-512");
 
 	private static final String AES = "AES";
 	private static final String AES_INSTANCE = "AES/ECB/NoPadding";
@@ -39,7 +40,8 @@ public final class CryptoUtils {
 	 * @throws NoSuchAlgorithmException
 	 *             - Caso o algoritmo fornecido não seja válido
 	 */
-	public static byte[] digest(byte[] input, String algorithm) throws NoSuchAlgorithmException {
+	public static byte[] digest(byte[] input, String algorithm)
+			throws NoSuchAlgorithmException {
 		MessageDigest md = MessageDigest.getInstance(algorithm);
 		md.reset();
 		return md.digest(input);
@@ -71,24 +73,31 @@ public final class CryptoUtils {
 	 * @throws IllegalArgumentException
 	 *             - Caso a String não sej auma representação haxadecimal válida
 	 */
-	public static byte[] hexStringToByteArray(String hexa) throws IllegalArgumentException {
+	public static byte[] hexStringToByteArray(String hexa)
+			throws IllegalArgumentException {
 		if (hexa.length() % 2 != 0) {
 			throw new IllegalArgumentException("String hexa inválida");
 		}
 		byte[] b = new byte[hexa.length() / 2];
 		for (int i = 0; i < hexa.length(); i += 2) {
-			b[i / 2] = (byte) ((hexDigits.indexOf(hexa.charAt(i)) << 4) | (hexDigits.indexOf(hexa.charAt(i + 1))));
+			b[i / 2] = (byte) ((hexDigits.indexOf(hexa.charAt(i)) << 4) | (hexDigits
+					.indexOf(hexa.charAt(i + 1))));
 		}
 		return b;
 	}
 
 	/**
-	 * recebe um array de bytes contendo o conteúdo para ser criptografado, um array de bytes contendo a chave para criptografar e um boleano para
-	 * decidir se será AES ou RC4 e retorna um array de bytes contendo um array de bytes em hexadecimal com o conteúdo gerado
+	 * recebe um array de bytes contendo o conteúdo para ser criptografado, 
+	 * um array de bytes contendo a chave para criptografar e um boleano para
+	 * decidir se será AES ou RC4 e retorna um array de bytes contendo um array
+	 * de bytes em hexadecimal com o conteúdo gerado
 	 */
-	public static byte[] encode(byte[] input, String key, boolean aes) throws NoSuchAlgorithmException, InvalidKeyException,
-			IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException {
-		SecretKeySpec skeySpec = new SecretKeySpec(hashKey(key).getBytes(), aes ? AES : RC4);
+	public static byte[] encode(byte[] input, String key, boolean aes)
+			throws NoSuchAlgorithmException, InvalidKeyException,
+			IllegalBlockSizeException, BadPaddingException,
+			NoSuchPaddingException {
+		SecretKeySpec skeySpec = new SecretKeySpec(hashKey(key).getBytes(),
+				aes ? AES : RC4);
 		Cipher cipher = Cipher.getInstance(aes ? AES_INSTANCE : RC4_INSTANCE);
 		cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
 		byte[] encrypted = cipher.doFinal(input);
@@ -96,12 +105,17 @@ public final class CryptoUtils {
 	}
 
 	/**
-	 * recebe um array de bytes contendo o conteúdo para ser descriptografado, um array de bytes contendo a chave para descriptografar e um boleano
-	 * para decidir se será AES ou RC4 e retorna um array de bytes contendo um array de bytes em hexadecimal com o conteúdo gerado
+	 * recebe um array de bytes contendo o conteúdo para ser descriptografado, 
+	 * um array de bytes contendo a chave para descriptografar e um boleano
+	 * para decidir se será AES ou RC4 e retorna um array de bytes contendo um 
+	 * array de bytes em hexadecimal com o conteúdo gerado
 	 */
-	public static byte[] decode(byte[] input, String key, boolean aes) throws NoSuchAlgorithmException, InvalidKeyException,
-			IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException {
-		SecretKeySpec skeySpec = new SecretKeySpec(hashKey(key).getBytes(), aes ? AES : RC4);
+	public static byte[] decode(byte[] input, String key, boolean aes)
+			throws NoSuchAlgorithmException, InvalidKeyException,
+			IllegalBlockSizeException, BadPaddingException,
+			NoSuchPaddingException {
+		SecretKeySpec skeySpec = new SecretKeySpec(hashKey(key).getBytes(),
+				aes ? AES : RC4);
 		Cipher cipher = Cipher.getInstance(aes ? AES_INSTANCE : RC4_INSTANCE);
 		cipher.init(Cipher.DECRYPT_MODE, skeySpec);
 		byte[] decrypted = cipher.doFinal(input);
@@ -113,7 +127,8 @@ public final class CryptoUtils {
 	 * 
 	 */
 	public static String hashKey(String key) throws NoSuchAlgorithmException {
-		return CryptoUtils.byteArrayToHexString(digest(key.getBytes(), "MD5")).substring(0, 16);
+		return CryptoUtils.byteArrayToHexString(digest(key.getBytes(), "MD5"))
+				.substring(0, 16);
 	}
 
 	/**
@@ -144,7 +159,8 @@ public final class CryptoUtils {
 	public static String fromHex(byte[] hex) {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < hex.length; i++) {
-			sb.append(Integer.toString((hex[i] & 0xff) + 0x100, 16).substring(1));
+			sb.append(Integer.toString((hex[i] & 0xff) + 0x100, 16)
+					.substring(1));
 		}
 		return sb.toString();
 	}
@@ -159,7 +175,8 @@ public final class CryptoUtils {
 		int len = s.length();
 		byte[] data = new byte[len / 2];
 		for (int i = 0; i < len; i += 2) {
-			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i + 1), 16));
+			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character
+					.digit(s.charAt(i + 1), 16));
 		}
 		return data;
 	}
