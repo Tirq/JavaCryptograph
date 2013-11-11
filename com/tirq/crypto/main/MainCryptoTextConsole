@@ -1,0 +1,44 @@
+package com.tirq.crypto.main;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+import com.tirq.crypto.utils.CryptoUtils;
+
+/**
+ * Exemplo usando o console para gerar hash(MD5,SHA-1,SHA-256,SHA512) de string informada
+ * 
+ * @author Tirq
+ * 
+ */
+public class MainCryptoTextConsole {
+
+	public static void main(String[] args) {
+		try {
+			Scanner sc = new Scanner(System.in);
+			String msg = "";
+			System.out.println("Text: ");
+			msg = sc.nextLine();
+			System.out.println("key: ");
+			String key = sc.nextLine();
+
+			for (boolean aes : Arrays.asList(true, false)) {
+				String tipo = aes ? "AES" : "RC4";
+				// CRIPTOGRAFAR
+				System.out.println(tipo);
+				String msgCripto = CryptoUtils.fromHex(CryptoUtils.encode(
+						CryptoUtils.nullPadString(msg).getBytes(), key, aes));
+				System.out.println("text: " + msg + " key: " + key + " " + tipo
+						+ " cripto:" + msgCripto);
+				// DESCRIPTOGRAFAR
+				String msgDescripto = new String(CryptoUtils.decode(
+						CryptoUtils.toHex(msgCripto), key, aes)).trim();
+				System.out.println("text: " + msg + " key: " + key + " " + tipo
+						+ " descripto:" + msgDescripto + "\n\n");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
