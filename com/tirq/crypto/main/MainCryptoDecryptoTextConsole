@@ -1,0 +1,94 @@
+package com.tirq.crypto.main;
+
+import java.util.Scanner;
+
+import com.tirq.crypto.utils.CryptoUtils;
+
+/**
+ * Exemplo usando o console para gerar crptografar e descriptografar String (AES,RC4)
+ * 
+ * @author Tirq
+ * 
+ */
+public class MainCryptoDecryptoTextConsole {
+
+	public static String cripto(String text, String key, String algorithm) {
+		try {
+			return CryptoUtils.fromHex(CryptoUtils.encode(CryptoUtils
+					.nullPadString(text).getBytes(), key, algorithm
+					.equals("AES") ? true : false));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	public static String decripto(String text, String key, String algorithm) {
+		try {
+			return new String(CryptoUtils.decode(CryptoUtils.toHex(text), key,
+					algorithm.equals("AES") ? true : false)).trim();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+	public static int teclado(Scanner sc) {
+		try {
+			return Integer.parseInt(sc.nextLine());
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+
+	public static void main(String[] args) {
+		try {
+			Scanner sc = new Scanner(System.in);
+			while (true) {
+				String msg = "";
+				String key = "";
+				System.out.println("1 - Criptografar AES: ");
+				System.out.println("2 - Criptografar RC4: ");
+				System.out.println("3 - Desriptografar AES: ");
+				System.out.println("4 - DesCriptografar RC4: ");
+				System.out.println("9 - Exit ");
+				int opcao = teclado(sc);
+				if (opcao == 9) {
+					System.out.println("exit ");
+					sc.close();
+					System.exit(0);
+				} else if (opcao != 0) {
+					System.out.println("Text: ");
+					msg = sc.nextLine();
+					System.out.println("key: ");
+					key = sc.nextLine();
+				}
+				switch (opcao) {
+				case 1:
+					System.out.println(cripto(msg, key, "AES"));
+					break;
+
+				case 2:
+					System.out.println(cripto(msg, key, "RC4"));
+					break;
+
+				case 3:
+					System.out.println(decripto(msg, key, "AES"));
+					break;
+
+				case 4:
+					System.out.println(decripto(msg, key, "RC4"));
+					break;
+
+				default:
+					System.out.println("Opção inválida ");
+					break;
+				}
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
