@@ -9,7 +9,7 @@ import com.tirq.crypto.utils.CryptoUtils;
 import com.tirq.crypto.utils.FileUtils;
 
 /**
- * Exemplo usando o JOptonsPane para gerar hash(MD5,SHA-1,SHA-256,SHA512) de string informada
+ * Exemplo usando o JOptonsPane de criptografia simétrica usando algoritmos (AES,RC4)
  * 
  * @author Tirq
  * 
