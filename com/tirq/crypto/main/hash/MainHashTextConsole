@@ -21,7 +21,6 @@ public class MainHashTextConsole {
 				byte[] byteGerado = CryptoUtils.digest(msg.getBytes(), alg);
 				String hash = CryptoUtils.byteArrayToHexString(byteGerado);
 				System.out.println(alg + " " + msg + ": " + hash);
-				System.out.println(byteGerado.toString());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
