@@ -1,0 +1,37 @@
+package com.tirq.crypto.main.hash;
+
+import java.io.File;
+
+import javax.swing.JOptionPane;
+
+import com.tirq.crypto.utils.CryptoUtils;
+import com.tirq.crypto.utils.FileUtils;
+
+/**
+ * Exemplo usando o JOptonsPane para gerar hash(MD5,SHA-1,SHA-256,SHA512) de string informada
+ * 
+ * @author Tirq
+ * 
+ */
+public class MainHashFileJOptionPane {
+
+	public static void main(String[] args) {
+		try {
+			String file = JOptionPane.showInputDialog("(Path)File to hash:");
+			StringBuilder msgAll = new StringBuilder();
+			if (file != null) {
+				for (String alg : CryptoUtils.ALGORITHMS) {
+					byte[] byteGerado = CryptoUtils.digest(
+							FileUtils.getBytes(new File(file)), alg);
+					String hash = CryptoUtils.byteArrayToHexString(byteGerado);
+					JOptionPane.showInputDialog(alg + " " + file + ": ", hash);
+					msgAll.append(alg + ": " + hash + "\n");
+				}
+				JOptionPane.showMessageDialog(null, "Text: " + file + "\n"
+						+ msgAll, "Hash:", JOptionPane.INFORMATION_MESSAGE);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
