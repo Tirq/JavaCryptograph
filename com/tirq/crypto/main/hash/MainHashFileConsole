@@ -1,0 +1,32 @@
+package com.tirq.crypto.main.hash;
+
+import java.io.File;
+import java.util.Scanner;
+
+import com.tirq.crypto.utils.CryptoUtils;
+import com.tirq.crypto.utils.FileUtils;
+
+/**
+ * Exemplo usando o console para gerar hash(MD5,SHA-1,SHA-256,SHA512) de string informada
+ * 
+ * @author Tirq
+ * 
+ */
+public class MainHashFileConsole {
+
+	public static void main(String[] args) {
+		try {
+			Scanner sc = new Scanner(System.in);
+			System.out.println("(Path)File to hash: ");
+			String file = sc.nextLine();
+			for (String alg : CryptoUtils.ALGORITHMS) {
+				byte[] byteGerado = CryptoUtils.digest(
+						FileUtils.getBytes(new File(file)), alg);
+				String hash = CryptoUtils.byteArrayToHexString(byteGerado);
+				System.out.println(alg + " " + file + ": " + hash);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
