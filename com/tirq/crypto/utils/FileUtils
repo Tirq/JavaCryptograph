@@ -1,0 +1,102 @@
+package com.tirq.crypto.utils;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+/**
+ * Utilitário para trabalhar com arquivos
+ * 
+ * @author Tirq
+ */
+public class FileUtils {
+
+	/**
+	 * Recupera bytes de arquivo
+	 * 
+	 * @throws IOException
+	 */
+	public static byte[] getBytes(File file) throws IOException {
+		int len = (int) file.length();
+		byte[] sendBuf = new byte[len];
+		FileInputStream inFile = null;
+		try {
+			inFile = new FileInputStream(file);
+			inFile.read(sendBuf, 0, len);
+		} catch (FileNotFoundException fnfex) {
+
+		} catch (IOException ioex) {
+		} finally {
+			if (inFile != null) {
+				inFile.close();
+			}
+		}
+		return sendBuf;
+	}
+
+	/**
+	 * Recupera conteúdo de arquivo retornando em String
+	 */
+	public static String getStringFile(String fileName) {
+		File f = new File(fileName);
+		String retorno = "";
+		FileReader reader = null;
+		try {
+			reader = new FileReader(f);
+			Scanner in = new Scanner(reader);
+			while (in.hasNextLine()) {
+				retorno += in.nextLine();
+			}
+		} catch (Exception e) {
+		}
+		return retorno;
+	}
+
+	/**
+	 * Grava em arquivo conteúdo
+	 */
+	public static void SaveFile(String conteudo, String filename) {
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(filename);
+			out.println(conteudo);
+			out.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if (out != null) {
+				out.close();
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		try {
+			// write
+			PrintWriter printer = new PrintWriter(new FileWriter("file", false));
+			StringBuilder s = new StringBuilder("\\o/");
+			printer.println(s);
+			printer.println(s.reverse());
+			printer.close();
+
+			printer.println(s);
+
+			// read
+			BufferedReader reader = new BufferedReader(new FileReader("arq"));
+			String linha;
+			while ((linha = reader.readLine()) != null) {
+				System.out.println(linha);
+			}
+			reader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}
