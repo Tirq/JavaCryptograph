@@ -1,0 +1,52 @@
+package com.tirq.crypto.main;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Scanner;
+
+import com.tirq.crypto.utils.CryptoUtils;
+import com.tirq.crypto.utils.FileUtils;
+
+/**
+ * Exemplo usando o console para gerar hash(MD5,SHA-1,SHA-256,SHA512) de string informada
+ * 
+ * @author Tirq
+ * 
+ */
+public class MainCryptoFileConsole {
+
+	public static void main(String[] args) {
+		try {
+			Scanner sc = new Scanner(System.in);
+			System.out.println("(Path)File to encrypto: ");
+			String file = sc.nextLine();
+
+			System.out.println("(Path)Name File encrypto: ");
+			String fileCripto = sc.nextLine();
+
+			System.out.println("(Path)Name File decrypto: ");
+			String fileDecripto = sc.nextLine();
+
+			System.out.println("key: ");
+			String key = sc.nextLine();
+
+			for (boolean aes : Arrays.asList(true, false)) {// CryptoUtils.nullPadString(FileUtils.getStringFile(file)).getBytes()
+				String tipo = aes ? "AES" : "RC4";
+				// CRIPTOGRAFANDO
+				String conteudo = CryptoUtils.fromHex(CryptoUtils.encode(
+						CryptoUtils.nullPadString(
+								new String(FileUtils.getBytes(new File(file))))
+								.getBytes(), key, aes));
+				FileUtils.SaveFile(conteudo, fileCripto + "_" + tipo);
+				// DESCRIPTOGRAFANDO
+				String conteudoCripto = new String(CryptoUtils.decode(
+						CryptoUtils.toHex(FileUtils.getStringFile(fileCripto
+								+ "_" + tipo)), key, aes)).trim();
+				FileUtils.SaveFile(conteudoCripto, fileDecripto + "_" + tipo);
+			}
+			System.out.println("Sucess in Crypt/Decryt in files");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}
