@@ -8,7 +8,7 @@ import com.tirq.crypto.utils.CryptoUtils;
 import com.tirq.crypto.utils.FileUtils;
 
 /**
- * Exemplo usando o JOptonsPane para gerar hash(MD5,SHA-1,SHA-256,SHA512) de string informada
+ * Exemplo usando o JOptonsPane para gerar hash(MD5,SHA-1,SHA-256,SHA512) de arquivo informado
  * 
  * @author Tirq
  * 
