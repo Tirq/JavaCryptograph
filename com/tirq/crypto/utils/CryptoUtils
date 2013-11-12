@@ -180,4 +180,47 @@ public final class CryptoUtils {
 		}
 		return data;
 	}
+	
+	/**
+	 * Método escrito em java.nio para arquivos grandes que causam Java heap space quando gerado hash de forma tradicional
+	 * exemplo de usoSystem.out.println(CryptoUtils.byteArrayToHexString(generateHashNio(new FileInputStream(file)));
+	 * @param inputStream
+	 * @param algorithm
+	 * @return
+	 */
+	public static byte[] generateHashNio(FileInputStream inputStream, String algorithm){
+	    if(inputStream==null){
+	        return null;
+	    }
+	    MessageDigest md;
+	    try {
+	        md = MessageDigest.getInstance(algorithm);
+	        FileChannel channel = inputStream.getChannel();
+	        ByteBuffer buff = ByteBuffer.allocate(2048);
+	        while(channel.read(buff) != -1)
+	        {
+	            buff.flip();
+	            md.update(buff);
+	            buff.clear();
+	        }
+	        byte[] hashValue = md.digest();
+	        return hashValue;
+	    }
+	    catch (NoSuchAlgorithmException e)
+	    {
+	        return null;
+	    } 
+	    catch (IOException e) 
+	    {
+	        return null;
+	    }
+	    finally
+	    {
+	        try {
+	            if(inputStream!=null)inputStream.close();
+	        } catch (IOException e) {
+
+	        }
+	    } 
+	}
 }
