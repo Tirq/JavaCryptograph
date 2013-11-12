@@ -1,0 +1,95 @@
+package com.tirq.crypto.main.hash;
+
+ 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileReader;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
+import com.tirq.crypto.utils.CryptoUtils;
+import com.tirq.crypto.utils.FileUtils;
+ 
+/**
+ * Exemplo usando o console para gerar hash(MD5,SHA-1,SHA-256,SHA512) de arquivo informado com Swing
+ * 
+ * @author Tirq
+ * 
+ */
+public class MainHashFileSwing extends JPanel implements ActionListener {
+    JButton btnFile, btnHash;
+    JTextArea hash;
+    JFileChooser fc;
+    File file;
+ 
+    public MainHashFileSwing() {
+        super(new BorderLayout());
+ 
+        hash = new JTextArea();
+        hash.setEditable(false);
+        JScrollPane logScrollPane = new JScrollPane(hash);
+ 
+        fc = new JFileChooser();
+ 
+        btnFile = new JButton("Open a File");
+        btnFile.addActionListener(this);
+ 
+        JPanel buttonPanel = new JPanel(); 
+        buttonPanel.add(btnFile);
+ 
+        add(buttonPanel, BorderLayout.PAGE_START);
+        add(logScrollPane, BorderLayout.CENTER);
+    }
+ 
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnFile) {
+        	file = null;
+            if (fc.showOpenDialog(MainHashFileSwing.this) == JFileChooser.APPROVE_OPTION) {
+               file = fc.getSelectedFile();
+               try {
+       			StringBuilder sb = new StringBuilder();
+           		for (String alg : CryptoUtils.ALGORITHMS) {
+       				byte[] byteGerado = CryptoUtils.digest(
+       						FileUtils.getBytes(file), alg);
+       				String hash = CryptoUtils.byteArrayToHexString(byteGerado);
+       				sb.append(alg + ": " + hash + "\n");
+       			}
+           		hash.setText(sb.toString());
+			} catch (Exception e2) {
+				hash.setText(e2.getMessage());
+			}
+            }
+        }
+    }
+
+    private static void createAndShowGUI() {
+        JFrame frame = new JFrame("Hash File");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(new MainHashFileSwing());
+        frame.setResizable(false);
+        frame.setMinimumSize(new Dimension(700, 313));
+        frame.setMaximumSize(new Dimension(700, 313));
+        frame.pack();
+        frame.setVisible(true);
+    }
+ 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                UIManager.put("swing.boldMetal", Boolean.FALSE); 
+                createAndShowGUI();
+            }
+        });
+    }
+}
