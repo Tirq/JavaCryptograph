@@ -20,8 +20,7 @@ public class MainHashFileConsole {
 			System.out.println("(Path)File to hash: ");
 			String file = sc.nextLine();
 			for (String alg : CryptoUtils.ALGORITHMS) {
-				byte[] byteGerado = CryptoUtils.digest(
-						FileUtils.getBytes(new File(file)), alg);
+				byte[] byteGerado = CryptoUtils.generateHashNio(new FileInputStream(new File(file)), alg);
 				String hash = CryptoUtils.byteArrayToHexString(byteGerado);
 				System.out.println(alg + " " + file + ": " + hash);
 			}
