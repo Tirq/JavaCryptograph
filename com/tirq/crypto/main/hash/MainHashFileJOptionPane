@@ -21,8 +21,7 @@ public class MainHashFileJOptionPane {
 			StringBuilder msgAll = new StringBuilder();
 			if (file != null) {
 				for (String alg : CryptoUtils.ALGORITHMS) {
-					byte[] byteGerado = CryptoUtils.digest(
-							FileUtils.getBytes(new File(file)), alg);
+					byte[] byteGerado = CryptoUtils.generateHashNio(new FileInputStream(new File(file)), alg);
 					String hash = CryptoUtils.byteArrayToHexString(byteGerado);
 					JOptionPane.showInputDialog(alg + " " + file + ": ", hash);
 					msgAll.append(alg + ": " + hash + "\n");
