@@ -60,8 +60,7 @@ public class MainHashFileSwing extends JPanel implements ActionListener {
                try {
        			StringBuilder sb = new StringBuilder();
            		for (String alg : CryptoUtils.ALGORITHMS) {
-       				byte[] byteGerado = CryptoUtils.digest(
-       						FileUtils.getBytes(file), alg);
+       				byte[] byteGerado = CryptoUtils.generateHashNio(new FileInputStream(file), alg);
        				String hash = CryptoUtils.byteArrayToHexString(byteGerado);
        				sb.append(alg + ": " + hash + "\n");
        			}
